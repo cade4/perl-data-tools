@@ -2,7 +2,7 @@ use ExtUtils::MakeMaker;
 
 WriteMakefile(
 
-  NAME            => 'MyMod::T',
-  VERSION_FROM    => 'lib/MyMod/T.pm'
+  NAME            => 'Data::Tools',
+  VERSION_FROM    => 'lib/Data/Tools.pm'
 
 );

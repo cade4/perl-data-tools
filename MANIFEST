@@ -1,4 +1,7 @@
 MANIFEST
+COPYING
+Changes
+README
 Makefile.PL
-lib/MyMod/T.pm
+lib/Data/Tools.pm
 
