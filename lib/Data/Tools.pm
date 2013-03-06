@@ -155,7 +155,7 @@ sub str2hash
   my %h;
   for( split( /\n/, $str ) )
     {
-    $h{ str_unescape( $1 ) } = str_unescape( $2 ) if ( /^([^=]+)=(.*)$/ );
+    $h{ str_url_unescape( $1 ) } = str_url_unescape( $2 ) if ( /^([^=]+)=(.*)$/ );
     }
   return \%h;
 }
@@ -167,8 +167,8 @@ sub hash2str
   my $s = "";
   while( my ( $k, $v ) = each %$hr )
     {
-    $k = str_escape( $k );
-    $v = str_escape( $v );
+    $k = str_url_escape( $k );
+    $v = str_url_escape( $v );
     $s .= "$k=$v\n";
     }
   return $s;
