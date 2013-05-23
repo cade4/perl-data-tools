@@ -16,7 +16,8 @@ use Digest::Whirlpool;
 use Digest::MD5;
 use Digest::SHA1;
 
-our $VERSION = '1.03';
+our $VERSION = '1.04';
+
 our @ISA    = qw( Exporter );
 our @EXPORT = qw(
               file_save
@@ -377,9 +378,9 @@ INIT  { __url_escapes_init(); }
 
 =head1 GITHUB REPOSITORY
 
-  git@github.com:cade4/perl-time-profiler.git
+  git@github.com:cade-vs/perl-time-profiler.git
   
-  git clone git://github.com/cade4/perl-data-tools.git
+  git clone git://github.com/cade-vs/perl-data-tools.git
   
 =head1 AUTHOR
 
