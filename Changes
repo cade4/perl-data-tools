@@ -1,5 +1,10 @@
 Revision history for Perl extension Data::Tools
 
+1.06  2013.07.03
+  
+    1. added more features to hash_validate()
+    2. changed version to reupload to CPAN
+
 1.05  2013.07.03
   
     1. hash_validate()

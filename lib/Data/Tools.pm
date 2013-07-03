@@ -16,7 +16,7 @@ use Digest::Whirlpool;
 use Digest::MD5;
 use Digest::SHA1;
 
-our $VERSION = '1.05';
+our $VERSION = '1.06';
 
 our @ISA    = qw( Exporter );
 our @EXPORT = qw(
