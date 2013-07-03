@@ -339,7 +339,7 @@ sub hash_validate
       {
       my $ic = $1; # ignore case
       my $re = $ic ? qr/$2/i : qr/$2/;
-      print Data::Dumper::Dumper( '=re=rei='x5, $k, $v, $vv, $re, $ic );
+      # print Data::Dumper::Dumper( '=re=rei='x5, $k, $v, $vv, $re, $ic );
       push @err, $k unless $v =~ /$re/;
       }  
     }
