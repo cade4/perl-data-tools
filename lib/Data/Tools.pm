@@ -342,6 +342,14 @@ sub hash_validate
       # print Data::Dumper::Dumper( '=re=rei='x5, $k, $v, $vv, $re, $ic );
       push @err, $k unless $v =~ /$re/;
       }  
+    elsif( $vv =~ /^\s*(-d|dir|directory)\s*$/i )
+      {
+      push @err, $k unless -d $v;
+      }  
+    elsif( $vv =~ /^\s*(-f|file)\s*$/i )
+      {
+      push @err, $k unless -f $v;
+      }  
     }
     
   return wantarray() ? sort( @err ) : @err > 0 ? 0 : 1;
@@ -444,6 +452,10 @@ INIT  { __url_escapes_init(); }
                          E => 'RE:\d+[a-f]*',  # regexp match
                          F => 'REI:\d+[a-f]*', # case insensitive regexp match
                          },
+                    DIR1  => '-d',   # must be existing directory
+                    DIR2  => 'dir',  # must be existing directory
+                    FILE1 => '-f',   # must be existing file  
+                    FILE2 => 'file', # must be existing file  
                     };
   # actual nested hash to be verified if looks like the example
   my $data_hr     = {
