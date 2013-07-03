@@ -6,7 +6,9 @@
 
 # SYNOPSIS
 
-    use Data::Tools qw( :all );
+    use Data::Tools qw( :all );  # import all functions
+    use Data::Tools;             # the same as :all :) 
+    use Data::Tools qw( :none ); # do not import anything, use full package names
 
     # --------------------------------------------------------------------------
 
@@ -36,20 +38,33 @@
     my $res      = hash_save( $file_name, $hash_ref );
     my $hash_ref = hash_load( $file_name );
 
-    # validate hash by example
-    my $validate = {
-                   KEY1 => 'INT',
-                   KEY2 => 'INT(-5,10)',
-                   KEY3 => 'REAL',
-                   };
-    my $data     = {
-                   KEY1 => '123',
-                   KEY2 =>  '-1',
-                   KEY3 =>  '1 234 567.89',
-                   }               
+    # validate (nested) hash by example
     
 
-    my @invalid_keys = hash_validate( $data, $validate );
+    # validation example nested hash
+    my $validate_hr = {
+                      A => 'INT',
+                      B => 'INT(-5,10)',
+                      C => 'REAL',
+                      D => {
+                           E => 'RE:\d+[a-f]*',  # regexp match
+                           F => 'REI:\d+[a-f]*', # case insensitive regexp match
+                           },
+                      };
+    # actual nested hash to be verified if looks like the example
+    my $data_hr     = {
+                      A => '123',
+                      B =>  '-1',
+                      C =>  '1 234 567.89',
+                      D => {
+                           E => '123abc',
+                           F => '456FFF',
+                           },
+                      }               
+    
+
+    my @invalid_keys = hash_validate( $data_hr, $validate_hr );
+    print "YES!" if hash_validate( $data_hr, $validate_hr );
 
     # --------------------------------------------------------------------------
     
@@ -67,7 +82,8 @@
     # --------------------------------------------------------------------------
     
 
-    my $perl_pkg_fn = perl_package_to_file( 'Data::Tools' ); # returns "Data/Tools.pm"
+    # converts perl package names to file names, f.e: returns "Data/Tools.pm"
+    my $perl_pkg_fn = perl_package_to_file( 'Data::Tools' );
 
     # --------------------------------------------------------------------------
 
@@ -78,11 +94,36 @@
 
 # FUNCTIONS
 
-    (more docs)
+## hash\_validate( $data\_hr, $validate\_hr );
+
+Return value can be either scalar or array context. In scalar context return
+value is true (1) or false (0). In array context it returns list of the invalid
+keys (possibly key paths like 'KEY1/KEY2/KEY3'):
+
+    # array context
+    my @invalid_keys = hash_validate( $data_hr, $validate_hr );
+    
+
+    # scalar context
+    print "YES!" if hash_validate( $data_hr, $validate_hr );
 
 # TODO
 
     (more docs)
+
+# REQUIRED MODULES
+
+Data::Tools is designed to be simple, compact and self sufficient. 
+However it uses some 3rd party modules:
+
+    * Digest::Whirlpool
+    * Digest::MD5
+    * Digest::SHA1
+
+# SEE ALSO
+
+For more complex cases of nested hash validation, 
+check Data::Validate::Struct module by Thomas Linden, cheers :)
 
 # GITHUB REPOSITORY
 
