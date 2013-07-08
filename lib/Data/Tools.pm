@@ -528,7 +528,7 @@ check Data::Validate::Struct module by Thomas Linden, cheers :)
 
 =head1 GITHUB REPOSITORY
 
-  git@github.com:cade-vs/perl-time-profiler.git
+  git@github.com:cade-vs/perl-data-tools.git
   
   git clone git://github.com/cade-vs/perl-data-tools.git
   
