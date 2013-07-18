@@ -29,6 +29,8 @@ our @EXPORT = qw(
 
               str2hash 
               hash2str
+
+              url2hash
               
               hash_uc
               hash_lc
@@ -225,6 +227,17 @@ sub hash2str
     $s .= "$k=$v\n";
     }
   return $s;
+}
+
+sub url2hash
+{
+  my $str = shift;
+  my %hash;
+  for( split( /&/, $str ) )
+    {
+    $hash{ uc str_url_unescape( $1 ) } = str_url_unescape( $2 ) if ( /^([^=]+)=(.*)$/ );
+    }
+  return \%hash;
 }
 
 ##############################################################################
