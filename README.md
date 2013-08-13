@@ -50,6 +50,10 @@
                            E => 'RE:\d+[a-f]*',  # regexp match
                            F => 'REI:\d+[a-f]*', # case insensitive regexp match
                            },
+                      DIR1  => '-d',   # must be existing directory
+                      DIR2  => 'dir',  # must be existing directory
+                      FILE1 => '-f',   # must be existing file  
+                      FILE2 => 'file', # must be existing file  
                       };
     # actual nested hash to be verified if looks like the example
     my $data_hr     = {
@@ -127,7 +131,7 @@ check Data::Validate::Struct module by Thomas Linden, cheers :)
 
 # GITHUB REPOSITORY
 
-    git@github.com:cade-vs/perl-time-profiler.git
+    git@github.com:cade-vs/perl-data-tools.git
     
 
     git clone git://github.com/cade-vs/perl-data-tools.git
