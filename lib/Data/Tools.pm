@@ -287,14 +287,14 @@ sub hash_save
   # @_ array of hash references
   my $data;
   $data .= hash2str( $_ ) for @_;
-  return save_file( $fn, $data );
+  return file_save( $fn, $data );
 }
 
 sub hash_load
 {
   my $fn = shift;
   
-  return str2hash( load_file( $fn ) );
+  return str2hash( file_load( $fn ) );
 }
 
 ##############################################################################
