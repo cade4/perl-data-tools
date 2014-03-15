@@ -444,11 +444,15 @@ INIT  { __url_escapes_init(); }
   
   my $hash_str = hash2str( $hash_ref ); # convert hash to string "key=value\n"
   my $hash_ref = str2hash( $hash_str ); # convert str "key-value\n" to hash
+  
+  my $hash_ref = url2hash( 'key1=val1&key2=val2&testing=tralala);
+  # $hash_ref will be { key1 => 'val1', key2 => 'val2', testing => 'tralala' }
 
-  hash_uc
-  hash_lc
-  hash_uc_ipl
-  hash_lc_ipl
+  my $hash_ref_with_upper_case_keys = hash_uc( $hash_ref_with_lower_case_keys );
+  my $hash_ref_with_lower_case_keys = hash_lc( $hash_ref_with_upper_case_keys );
+
+  hash_uc_ipl( $hash_ref_to_be_converted_to_upper_case_keys );
+  hash_lc_ipl( $hash_ref_to_be_converted_to_lower_case_keys );
   
   # save/load hash in str_url_escaped form to/from a file
   my $res      = hash_save( $file_name, $hash_ref );
