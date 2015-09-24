@@ -256,12 +256,13 @@ sub __hash_ulc
   my $ipl = shift;
   
   my $nr = $ipl ? $hr : {};
-  while( my ( $k, $v ) = each %$hr )
+  for my $k ( keys %$hr )
     {
+    my $v = $hr->{ $k };
     my $old_k = $k;
     $k = $uc ? uc( $k ) : lc( $k );
     $nr->{ $k } = $v;
-    delete $nr->{ $old_k } if $ipl and $k ne $old_k;
+    delete $nr->{ $old_k } if ($ipl and $k ne $old_k);
     }
   return $nr;  
 }
