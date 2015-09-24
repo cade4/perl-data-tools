@@ -1,36 +1,44 @@
 Revision history for Perl extension Data::Tools
 
-1.06  2013.07.03
+1.07 2015-09-24 CADE
+
+    - added hash_lock_recursive()
+            hash_unlock_recursive()
+      to handle missing functionality until perl 5.22 etc.
+    - moved to cpan changelog syntax  
+    - added glob_tree()
+
+1.06 2013-07-03 CADE
   
-    1. added more features to hash_validate()
-    2. changed version to reupload to CPAN
+    - added more features to hash_validate()
+    - changed version to reupload to CPAN
 
-1.05  2013.07.03
+1.05 2013-07-03 CADE
   
-    1. hash_validate()
-    2. more docs, "required modules", "see also"
+    - hash_validate()
+    - more docs, "required modules", "see also"
 
-1.04  2013.05.24
+1.04  2013-05-24 CADE
 
-    1. changed github urls
+    - changed github urls
 
-1.03  2013.05.04
+1.03  2013-05-04 CADE
   
-    1. added hash_uc()/hash_lc()
+    - added hash_uc()/hash_lc()
 
-1.02  2013.03.24
+1.02  2013-03-24 CADE
 
-    1. added digest funcs
-    2. fixed docs
-    3. added github info
+    - added digest funcs
+    - fixed docs
+    - added github info
 
-1.01  2013.03.07
+1.01  2013-03-07 CADE
 
-    1. fixed names in the docs
+    - fixed names in the docs
 
-1.00  2013.03.06
+1.00  2013-03-06 CADE
 
-    1. history lost, initial CPAN release
+    - history lost, initial CPAN release
 
     
     

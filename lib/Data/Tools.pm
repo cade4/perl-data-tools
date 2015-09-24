@@ -15,8 +15,10 @@ use Carp;
 use Digest::Whirlpool;
 use Digest::MD5;
 use Digest::SHA1;
+use File::Glob;
+use Hash::Util qw( lock_hashref unlock_hashref );
 
-our $VERSION = '1.06';
+our $VERSION = '1.07';
 
 our @ISA    = qw( Exporter );
 our @EXPORT = qw(
@@ -41,6 +43,9 @@ our @EXPORT = qw(
               hash_load
               
               hash_validate
+              
+              hash_lock_recursive
+              hash_unlock_recursive
 
               str_url_escape 
               str_url_unescape 
@@ -56,6 +61,8 @@ our @EXPORT = qw(
               wp_hex
               md5_hex
               sha1_hex
+              
+              glob_tree
 
             );
 
@@ -370,6 +377,33 @@ sub hash_validate
 
 ##############################################################################
 
+# handle recursive hashes untill perl 5.22 etc.
+sub hash_lock_recursive
+{
+  my $hr = shift;
+  
+  lock_hashref( $hr );
+  for my $vr ( values %$hr )
+    {
+    next unless ref( $vr ) eq 'HASH';
+    hash_lock_recursive( $vr );
+    }
+}
+
+sub hash_unlock_recursive
+{
+  my $hr = shift;
+  
+  unlock_hashref( $hr );
+  for my $vr ( values %$hr )
+    {
+    next unless ref( $vr ) eq 'HASH';
+    hash_unlock_recursive( $vr );
+    }
+}
+
+##############################################################################
+
 sub perl_package_to_file
 {
   my $s = shift;
@@ -407,6 +441,42 @@ sub sha1_hex
   my $hex = Digest::SHA1::sha1_hex( $s );
 
   return $hex;
+}
+
+##############################################################################
+
+sub __glob_tree_tree_walk
+{
+  my $p = shift; # path
+  my $f = shift; # file mask
+  my $r = shift; # result arr-ref
+
+  #print STDERR "DEBUG: __glob_tree_tree_walk: $p -- $f [$p$f]\n";
+
+  push @$r, grep { -e } sort File::Glob::bsd_glob( "$p$f" );
+
+  opendir( my $dir, "${p}." ) or return undef;
+  my @dirs = sort grep { !/^\./ } grep { -d "$p$_" } readdir $dir;
+  closedir( $dir );
+  
+  #print STDERR "DEBUG: __glob_tree_tree_walk: $p -- $f [$p*] dirs: (@dirs)\n\n";
+
+  __glob_tree_tree_walk( "$p$_/", $f, $r ) for @dirs;
+  
+  return 1;
+}
+
+sub glob_tree
+{
+  my @res;
+  for( @_ )
+    {
+    die "glob_tree: invalid argument" unless /^(.*?\/)([^\/]+)$/;
+    my $p = $1;
+    my $f = $2;
+    __glob_tree_tree_walk( $p, $f, \@res );
+    }
+  return @res;
 }
 
 ##############################################################################
@@ -510,6 +580,12 @@ INIT  { __url_escapes_init(); }
   my $whirlpool_hex = wp_hex( $data );
   my $sha1_hex      = sha1_hex( $data );
   my $md5_hex       = md5_hex( $data );
+
+  # --------------------------------------------------------------------------
+
+  # find all *.txt files in all subdirectories starting from /usr/local
+  # returned files are with full path names
+  my @files = glob_tree( '/usr/local/*.txt' );
 
 =head1 FUNCTIONS
 
