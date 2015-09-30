@@ -16,6 +16,13 @@
     my $content = file_load( $file_name );
 
     # --------------------------------------------------------------------------
+
+    my $file_modification_time_in_seconds = file_mtime( $file_name );
+    my $file_change_time_in_seconds       = file_ctime( $file_name );
+    my $file_last_access_time_in_seconds  = file_atime( $file_name );
+    my $file_size                         = file_size(  $file_name );
+
+    # --------------------------------------------------------------------------
     
 
     my $res  = dir_path_make( '/path/to/somewhere' ); # create full path with 0700
@@ -27,11 +34,16 @@
 
     my $hash_str = hash2str( $hash_ref ); # convert hash to string "key=value\n"
     my $hash_ref = str2hash( $hash_str ); # convert str "key-value\n" to hash
+    
 
-    hash_uc
-    hash_lc
-    hash_uc_ipl
-    hash_lc_ipl
+    my $hash_ref = url2hash( 'key1=val1&key2=val2&testing=tralala);
+    # $hash_ref will be { key1 => 'val1', key2 => 'val2', testing => 'tralala' }
+
+    my $hash_ref_with_upper_case_keys = hash_uc( $hash_ref_with_lower_case_keys );
+    my $hash_ref_with_lower_case_keys = hash_lc( $hash_ref_with_upper_case_keys );
+
+    hash_uc_ipl( $hash_ref_to_be_converted_to_upper_case_keys );
+    hash_lc_ipl( $hash_ref_to_be_converted_to_lower_case_keys );
     
 
     # save/load hash in str_url_escaped form to/from a file
@@ -95,6 +107,12 @@
     my $whirlpool_hex = wp_hex( $data );
     my $sha1_hex      = sha1_hex( $data );
     my $md5_hex       = md5_hex( $data );
+
+    # --------------------------------------------------------------------------
+
+    # find all *.txt files in all subdirectories starting from /usr/local
+    # returned files are with full path names
+    my @files = glob_tree( '/usr/local/*.txt' );
 
 # FUNCTIONS
 
