@@ -18,14 +18,19 @@ use Digest::SHA1;
 use File::Glob;
 use Hash::Util qw( lock_hashref unlock_hashref );
 
-our $VERSION = '1.07';
+our $VERSION = '1.08';
 
 our @ISA    = qw( Exporter );
 our @EXPORT = qw(
 
               file_save
               file_load
-              
+
+              file_mtime
+              file_ctime
+              file_atime
+              file_size
+
               dir_path_make
               dir_path_ensure
 
@@ -97,6 +102,28 @@ sub file_save
   print $o @_;
   close $o;
   return 1;
+}
+
+##############################################################################
+
+sub file_mtime
+{
+  return (stat(shift))[9];
+}
+
+sub file_ctime
+{
+  return (stat(shift))[10];
+}
+
+sub file_atime
+{
+  return (stat(shift))[8];
+}
+
+sub file_size
+{
+  return (stat(shift))[7];
 }
 
 ##############################################################################
@@ -504,6 +531,13 @@ INIT  { __url_escapes_init(); }
 
   my $res     = file_save( $file_name, 'file content here' );
   my $content = file_load( $file_name );
+
+  # --------------------------------------------------------------------------
+
+  my $file_modification_time_in_seconds = file_mtime( $file_name );
+  my $file_change_time_in_seconds       = file_ctime( $file_name );
+  my $file_last_access_time_in_seconds  = file_atime( $file_name );
+  my $file_size                         = file_size(  $file_name );
 
   # --------------------------------------------------------------------------
   
