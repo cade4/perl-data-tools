@@ -16,9 +16,9 @@ use Digest::Whirlpool;
 use Digest::MD5;
 use Digest::SHA1;
 use File::Glob;
-use Hash::Util qw( lock_hashref unlock_hashref );
+use Hash::Util qw( lock_hashref unlock_hashref lock_ref_keys );
 
-our $VERSION = '1.08';
+our $VERSION = '1.10';
 
 our @ISA    = qw( Exporter );
 our @EXPORT = qw(
@@ -51,6 +51,7 @@ our @EXPORT = qw(
               
               hash_lock_recursive
               hash_unlock_recursive
+              hash_keys_lock_recursive
 
               str_url_escape 
               str_url_unescape 
@@ -68,6 +69,7 @@ our @EXPORT = qw(
               sha1_hex
               
               glob_tree
+              read_dir_entries
 
             );
 
@@ -405,7 +407,7 @@ sub hash_validate
 
 ##############################################################################
 
-# handle recursive hashes untill perl 5.22 etc.
+# handle recursive hashes until perl 5.22 etc.
 sub hash_lock_recursive
 {
   my $hr = shift;
@@ -427,6 +429,18 @@ sub hash_unlock_recursive
     {
     next unless ref( $vr ) eq 'HASH';
     hash_unlock_recursive( $vr );
+    }
+}
+
+sub hash_keys_lock_recursive
+{
+  my $hr = shift;
+  
+  lock_ref_keys( $hr );
+  for my $vr ( values %$hr )
+    {
+    next unless ref( $vr ) eq 'HASH';
+    hash_keys_lock_recursive( $vr );
     }
 }
 
@@ -481,11 +495,9 @@ sub __glob_tree_tree_walk
 
   #print STDERR "DEBUG: __glob_tree_tree_walk: $p -- $f [$p$f]\n";
 
-  push @$r, grep { -e } sort File::Glob::bsd_glob( "$p$f" );
+  push @$r, grep { -e } sort ( File::Glob::bsd_glob( "$p$f" ) );
 
-  opendir( my $dir, "${p}." ) or return undef;
-  my @dirs = sort grep { !/^\./ } grep { -d "$p$_" } readdir $dir;
-  closedir( $dir );
+  my @dirs = grep { -d "$p$_" } read_dir_entries( "$p/." );
   
   #print STDERR "DEBUG: __glob_tree_tree_walk: $p -- $f [$p*] dirs: (@dirs)\n\n";
 
@@ -505,6 +517,17 @@ sub glob_tree
     __glob_tree_tree_walk( $p, $f, \@res );
     }
   return @res;
+}
+
+sub read_dir_entries
+{
+  my $p = shift; # path
+  
+  opendir( my $dir, $p ) or return undef;
+  my @e = sort grep { !/^\./ } readdir $dir;
+  closedir( $dir );
+  
+  return @e;
 }
 
 ##############################################################################
@@ -621,6 +644,9 @@ INIT  { __url_escapes_init(); }
   # find all *.txt files in all subdirectories starting from /usr/local
   # returned files are with full path names
   my @files = glob_tree( '/usr/local/*.txt' );
+
+  # read directory entries names (without full paths)
+  my @files_and_dirs = read_dir_entries( '/tmp/secret/dir' );
 
 =head1 FUNCTIONS
 

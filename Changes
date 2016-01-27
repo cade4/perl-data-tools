@@ -1,5 +1,14 @@
 Revision history for Perl extension Data::Tools
 
+1.10 2016-01-27 CADE
+
+    - fixed non-obvious iterator behaviour of File::Glob inside glob_tree()
+
+1.09 2016-01-03 CADE
+
+    - added:
+        hash_keys_lock_recursive
+
 1.08 2015-09-30 CADE
 
     - added:
