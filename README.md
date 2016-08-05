@@ -114,6 +114,9 @@
     # returned files are with full path names
     my @files = glob_tree( '/usr/local/*.txt' );
 
+    # read directory entries names (without full paths)
+    my @files_and_dirs = read_dir_entries( '/tmp/secret/dir' );
+
 # FUNCTIONS
 
 ## hash\_validate( $data\_hr, $validate\_hr );

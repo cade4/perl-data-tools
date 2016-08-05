@@ -1,7 +1,7 @@
 ##############################################################################
 #
 #  Data::Tools perl module
-#  (c) Vladi Belperchinov-Shabanski "Cade" 2013
+#  (c) Vladi Belperchinov-Shabanski "Cade" 2013-2016
 #  http://cade.datamax.bg
 #  <cade@bis.bg> <cade@biscom.net> <cade@datamax.bg> <cade@cpan.org>
 #
@@ -18,7 +18,7 @@ use Digest::SHA1;
 use File::Glob;
 use Hash::Util qw( lock_hashref unlock_hashref lock_ref_keys );
 
-our $VERSION = '1.10';
+our $VERSION = '1.11';
 
 our @ISA    = qw( Exporter );
 our @EXPORT = qw(
