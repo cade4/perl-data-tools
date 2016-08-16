@@ -18,7 +18,7 @@ use Digest::SHA1;
 use File::Glob;
 use Hash::Util qw( lock_hashref unlock_hashref lock_ref_keys );
 
-our $VERSION = '1.11';
+our $VERSION = '1.12';
 
 our @ISA    = qw( Exporter );
 our @EXPORT = qw(

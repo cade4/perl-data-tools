@@ -14,7 +14,7 @@ use Exporter;
 use IO::Select;
 use Time::HiRes qw( time );
 
-our $VERSION = '1.11';
+our $VERSION = '1.12';
 
 our @ISA    = qw( Exporter );
 our @EXPORT = qw(
@@ -107,10 +107,11 @@ sub socket_print
 
 sub socket_read_message
 {
-  my $sock = shift;
+  my $sock    = shift;
+  my $timeout = shift;
    
   my $data_len_N32;
-  my $rc_data_len = socket_read( $sock, \$data_len_N32, 4 );
+  my $rc_data_len = socket_read( $sock, \$data_len_N32, 4, $timeout );
   if( $rc_data_len == 0 )
     {
     # end of comms
@@ -135,17 +136,18 @@ sub socket_read_message
     return undef;
     }
   
-  return $data;
+  return $read_data;
 }
 
 sub socket_write_message
 {
-  my $sock = shift;
-  my $data = shift;
+  my $sock    = shift;
+  my $data    = shift;
+  my $timeout = shift;
   
   # FIXME: utf?
   my $data_len = length( $data );
-  my $res_data_len = socket_write( $sock, pack( 'N', $data_len ) . $data, 4 + $data_len );
+  my $res_data_len = socket_write( $sock, pack( 'N', $data_len ) . $data, 4 + $data_len, $timeout );
   if( $res_data_len != 4 + $data_len )
     {
     # invalid data len sent
