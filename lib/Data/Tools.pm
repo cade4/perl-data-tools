@@ -12,13 +12,14 @@ package Data::Tools;
 use strict;
 use Exporter;
 use Carp;
+use Digest;
 use Digest::Whirlpool;
 use Digest::MD5;
 use Digest::SHA1;
 use File::Glob;
 use Hash::Util qw( lock_hashref unlock_hashref lock_ref_keys );
 
-our $VERSION = '1.12';
+our $VERSION = '1.14';
 
 our @ISA    = qw( Exporter );
 our @EXPORT = qw(
@@ -61,12 +62,18 @@ our @EXPORT = qw(
               
               str_hex 
               str_unhex
+
+              str_num_comma
+              str_pad
+              str_countable
               
               perl_package_to_file
 
               wp_hex
               md5_hex
               sha1_hex
+              
+              create_random_id
               
               glob_tree
               read_dir_entries
@@ -235,6 +242,40 @@ sub str_unhex
   
   $text =~ s/([0-9A-F][0-9A-F])/chr(hex($1))/ge;
   return $text;
+}
+
+##############################################################################
+
+sub str_num_comma
+{
+  my $data = shift;
+  $data = reverse $data;
+  $data =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1`/g;
+  $data = reverse $data;
+  return $data;
+}
+
+sub str_pad
+{
+  my $str = shift;
+  my $len = shift;
+  my $pad = shift;
+  $pad = ' ' unless defined $pad;
+
+  $str = reverse $str if $len < 0;
+  $str = substr( $str . ($pad x abs($len)), 0, abs($len) );
+  $str = reverse $str if $len < 0;
+
+  return $str;
+}
+
+sub str_countable
+{
+  my $count = shift;
+  my $one   = shift;
+  my $many  = shift;
+
+  return $count == 0 ? $many : $count == 1 ? $one : $many;
 }
 
 ##############################################################################
@@ -487,6 +528,19 @@ sub sha1_hex
 
 ##############################################################################
 
+sub create_random_id
+{
+  my $len = shift() || 128;
+  my $let = shift() || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+  my $l = length( $let );
+  my $id;
+  $id .= substr( $let, int(rand() * $l), 1 ) for ( 1 .. $len );
+  return $id;
+};
+
+##############################################################################
+
 sub __glob_tree_tree_walk
 {
   my $p = shift; # path
@@ -638,6 +692,15 @@ INIT  { __url_escapes_init(); }
   my $whirlpool_hex = wp_hex( $data );
   my $sha1_hex      = sha1_hex( $data );
   my $md5_hex       = md5_hex( $data );
+
+  # --------------------------------------------------------------------------
+
+  my $formatted_str = str_num_comma( 1234567.89 );  # returns "1'234'567.89"
+  my $padded_str    = str_pad( 'right', -12, '*' ); # returns "right*******"
+  my $str_c         = str_countable( $dc, 'day', 'days' );
+                      # returns 'days' for $dc == 0
+                      # returns 'day'  for $dc == 1
+                      # returns 'days' for $dc >  1
 
   # --------------------------------------------------------------------------
 
