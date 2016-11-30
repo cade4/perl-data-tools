@@ -1,5 +1,11 @@
 Revision history for Perl extension Data::Tools
 
+1.14 2016-11-30
+
+    - added Data::Tools::Time utilities
+    - added Data::Tools::Socket docs
+    - added Data::Tools::Time test t/t1-time-diff.pl
+
 1.12 2016-09-16
 
     - fixed type in Data::Tools::Socket

@@ -14,7 +14,7 @@ use Exporter;
 use IO::Select;
 use Time::HiRes qw( time );
 
-our $VERSION = '1.12';
+our $VERSION = '1.14';
 
 our @ISA    = qw( Exporter );
 our @EXPORT = qw(
@@ -100,7 +100,7 @@ sub socket_print
    my $data     = shift;
    my $timeout  = shift || undef;
    
-   socket_write( $sock, $data, length( $data ), $timeout );
+   return socket_write( $sock, $data, length( $data ), $timeout );
 }
 
 ##############################################################################
@@ -156,6 +156,105 @@ sub socket_write_message
 
   return 1;
 }
+
+##############################################################################
+
+=pod
+
+
+=head1 NAME
+
+  Data::Tools::Socket provides set of socket I/O functions.
+
+=head1 SYNOPSIS
+
+  use Data::Tools qw( :all );  # import all functions
+  use Data::Tools;             # the same as :all :) 
+  use Data::Tools qw( :none ); # do not import anything, use full package names
+
+  # --------------------------------------------------------------------------
+
+  my $read_res_len  = socket_read(  $socket, $data_ref, $length, $timeout );
+  my $write_res_len = socket_write( $socket, $data,     $length, $timeout );
+  my $write_res_len = socket_print( $socket, $data, $timeout );
+
+  # --------------------------------------------------------------------------
+
+  my $read_data = socket_read_message(  $socket, $timeout );
+  my $write_res = socket_write_message( $socket, $data, $timeout );
+
+  # --------------------------------------------------------------------------
+
+=head1 FUNCTIONS
+
+=head2 socket_read(  $socket, $data_ref, $length, $timeout )
+
+Reads $length sized data from the $socket and store it to $data_ref scalar 
+reference.
+
+Returns read length (can be shorter than requested $length);
+
+$timeout is optional, it is in seconds and can be less than 1 second.
+
+=head2 socket_write( $socket, $data,     $length, $timeout )
+
+Writes $length sized data from $data scalar to the $socket.
+
+Returns write length (can be shorter than requested $length);
+
+$timeout is optional, it is in seconds and can be less than 1 second.
+
+=head2 socket_print( $socket, $data, $timeout )
+
+Same as socket_write() but calculates requested length from the $data scalar.
+
+$timeout is optional, it is in seconds and can be less than 1 second.
+
+=head2 socket_read_message(  $socket, $timeout )
+
+Reads 32bit network-order integer, which then is used as data size to be read
+from the socket (i.e. message = 32bit-integer + data ).
+
+Returns read data or undef for message or network error.
+
+$timeout is optional, it is in seconds and can be less than 1 second.
+
+=head2 socket_write_message( $socket, $data, $timeout )
+
+Writes 32bit network-order integer, which is the size of the given $data to be
+written to the $socket and then writes the data 
+(i.e. message = 32bit-integer + data ).
+
+Returns 1 on success or undef for message or network error.
+
+$timeout is optional, it is in seconds and can be less than 1 second.
+
+=head1 TODO
+
+  * more docs
+
+=head1 REQUIRED MODULES
+
+Data::Tools::Time uses:
+
+  * IO::Select
+  * Time::HiRes
+
+=head1 GITHUB REPOSITORY
+
+  git@github.com:cade-vs/perl-data-tools.git
+  
+  git clone git://github.com/cade-vs/perl-data-tools.git
+  
+=head1 AUTHOR
+
+  Vladi Belperchinov-Shabanski "Cade"
+
+  <cade@biscom.net> <cade@datamax.bg> <cade@cpan.org>
+
+  http://cade.datamax.bg
+
+=cut
 
 ##############################################################################
 1;

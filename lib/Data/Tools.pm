@@ -729,6 +729,13 @@ keys (possibly key paths like 'KEY1/KEY2/KEY3'):
 
   (more docs)
 
+=head1 DATA::TOOLS SUB-MODULES
+
+Data::Tools package includes several sub-modules:
+
+  * Data::Tools::Socket (socket I/O processing, TODO: docs)
+  * Data::Tools::Time   (time processing)
+
 =head1 REQUIRED MODULES
 
 Data::Tools is designed to be simple, compact and self sufficient. 
