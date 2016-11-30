@@ -305,7 +305,7 @@ Data::Tools::Socket uses:
 
 ## unix\_time\_diff\_in\_words( $unix\_time\_diff )
 
-Returns human-friendly text for the give time difference (in seconds).
+Returns human-friendly text for the given time difference (in seconds).
 This function returns absolute difference text, for relative 
 (before/after/ago/in) see unix\_time\_diff\_in\_words\_relative().
 
@@ -316,7 +316,7 @@ Same as unix\_time\_diff\_in\_words() but returns relative text
 
 ## julian\_date\_diff\_in\_words( $julian\_date\_diff );
 
-Returns human-friendly text for the give date difference (in days).
+Returns human-friendly text for the given date difference (in days).
 This function returns absolute difference text, for relative 
 (before/after/ago/in) see julian\_day\_diff\_in\_words\_relative().
 
