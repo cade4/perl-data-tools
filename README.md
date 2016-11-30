@@ -256,7 +256,7 @@ $timeout is optional, it is in seconds and can be less than 1 second.
 
 # REQUIRED MODULES
 
-Data::Tools::Time uses:
+Data::Tools::Socket uses:
 
     * IO::Select
     * Time::HiRes
