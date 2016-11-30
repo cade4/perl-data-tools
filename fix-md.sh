@@ -1,2 +1,5 @@
 #!/bin/bash
-pod2markdown < lib/Data/Tools.pm > README.md
+> README.md
+pod2markdown < lib/Data/Tools.pm        >> README.md
+pod2markdown < lib/Data/Tools/Socket.pm >> README.md
+pod2markdown < lib/Data/Tools/Time.pm   >> README.md
