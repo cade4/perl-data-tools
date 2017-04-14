@@ -1,7 +1,7 @@
 ##############################################################################
 #
 #  Data::Tools perl module
-#  (c) Vladi Belperchinov-Shabanski "Cade" 2013-2016
+#  2013-2017 (c) Vladi Belperchinov-Shabanski "Cade"
 #  http://cade.datamax.bg
 #  <cade@bis.bg> <cade@biscom.net> <cade@datamax.bg> <cade@cpan.org>
 #

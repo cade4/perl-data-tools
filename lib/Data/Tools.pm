@@ -65,6 +65,7 @@ our @EXPORT = qw(
 
               str_num_comma
               str_pad
+              str_pad_center
               str_countable
               
               perl_package_to_file
@@ -265,6 +266,21 @@ sub str_pad
   $str = reverse $str if $len < 0;
   $str = substr( $str . ($pad x abs($len)), 0, abs($len) );
   $str = reverse $str if $len < 0;
+
+  return $str;
+}
+
+sub str_pad_center
+{
+  my $str = shift;
+  my $len = shift;
+  my $pad = shift;
+  $pad = ' ' unless defined $pad;
+
+  my $padlen = int((abs($len) - length($str))/2);
+  my $padding = $pad x $padlen if $padlen > 0;
+  
+  $str = substr( $padding . $str . $padding . $pad, 0, abs($len) );
 
   return $str;
 }
