@@ -38,6 +38,7 @@ sub socket_read
    my $timeout = shift || undef;
    
    my $stime = time();
+   $$data = undef;
 
    my $rlen = $readlen;
 #print STDERR "SOCKET_READ: rlen [$rlen]\n";
