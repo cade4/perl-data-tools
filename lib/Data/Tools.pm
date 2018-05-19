@@ -98,10 +98,14 @@ our %EXPORT_TAGS = (
 
 sub file_load
 {
-  my $fn = shift; # file name
+  my $fn  = shift; # file name
+  my $opt = shift;
   
   my $i;
-  open( $i, $fn ) or return undef;
+  my $encoding = $opt->{ 'encoding' } || $opt->{ 'ENCODING' };
+  my $mopt;
+  $mopt = ":encoding($encoding)" if $encoding;
+  open( $i, "<" . $mopt, $fn ) or return undef;
   local $/ = undef;
   my $s = <$i>;
   close $i;
@@ -113,7 +117,7 @@ sub file_save
   my $fn = shift; # file name
 
   my $o;
-  open( $o, ">$fn" ) or return 0;
+  open( $o, ">", $fn ) or return 0;
   print $o @_;
   close $o;
   return 1;
