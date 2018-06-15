@@ -117,7 +117,7 @@ sub file_save
   my $fn = shift; # file name
 
   my $o;
-  open( $o, ">", $fn ) or return 0;
+  open( $o, ">:encoding(UTF-8)", $fn ) or return 0;
   print $o @_;
   close $o;
   return 1;
