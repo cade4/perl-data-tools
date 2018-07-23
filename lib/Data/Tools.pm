@@ -1,7 +1,7 @@
 ##############################################################################
 #
 #  Data::Tools perl module
-#  (c) Vladi Belperchinov-Shabanski "Cade" 2013-2016
+#  2013-2018 (c) Vladi Belperchinov-Shabanski "Cade"
 #  http://cade.datamax.bg
 #  <cade@bis.bg> <cade@biscom.net> <cade@datamax.bg> <cade@cpan.org>
 #
@@ -19,13 +19,14 @@ use Digest::SHA1;
 use File::Glob;
 use Hash::Util qw( lock_hashref unlock_hashref lock_ref_keys );
 
-our $VERSION = '1.15';
+our $VERSION = '1.16';
 
 our @ISA    = qw( Exporter );
 our @EXPORT = qw(
 
               file_save
               file_load
+              file_load_ar
 
               file_mtime
               file_ctime
@@ -59,6 +60,9 @@ our @EXPORT = qw(
               hash_unlock_recursive
               hash_keys_lock_recursive
 
+              str_escape 
+              str_unescape 
+
               str_url_escape 
               str_url_unescape 
               
@@ -72,7 +76,7 @@ our @EXPORT = qw(
               str_pad
               str_pad_center
               str_countable
-              
+
               perl_package_to_file
 
               wp_hex
@@ -110,6 +114,21 @@ sub file_load
   my $s = <$i>;
   close $i;
   return $s;
+}
+
+sub file_load_ar
+{
+  my $fn  = shift; # file name
+  my $opt = shift;
+  
+  my $i;
+  my $encoding = $opt->{ 'encoding' } || $opt->{ 'ENCODING' };
+  my $mopt;
+  $mopt = ":encoding($encoding)" if $encoding;
+  open( $i, "<" . $mopt, $fn ) or return undef;
+  my @all = <$i>;
+  close $i;
+  return \@all;
 }
 
 sub file_save
@@ -204,6 +223,29 @@ sub dir_path_ensure
   dir_path_make( $dir, @_ ) unless -d $dir;
   return undef unless -d $dir;
   return $dir;
+}
+
+##############################################################################
+
+sub str_escape
+{
+  my $text = shift;
+  
+  $text =~ s/\\/\\\\/g;
+  $text =~ s/\r/\\r/g;
+  $text =~ s/\n/\\n/g;
+  return $text;
+}
+
+sub str_unescape
+{
+  my $text = shift;
+
+  $text =~ s/\\r/\r/g;
+  $text =~ s/\\n/\n/g;
+  $text =~ s/\\\\/\\/g;
+  
+  return $text;
 }
 
 ##############################################################################
@@ -658,6 +700,8 @@ INIT  { __url_escapes_init(); }
 
   my $res     = file_save( $file_name, 'file content here' );
   my $content = file_load( $file_name );
+
+  my $content_arrayref = file_load_ar( $file_name );
 
   # --------------------------------------------------------------------------
 

@@ -1,5 +1,10 @@
 Revision history for Perl extension Data::Tools
 
+1.16 2018-07-19
+
+    - added Data::Tools::Math functions
+    - added file_load_ar()
+
 1.15 2018-03-31
 
     - file name path functions added
