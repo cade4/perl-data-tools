@@ -19,7 +19,7 @@ use Digest::SHA1;
 use File::Glob;
 use Hash::Util qw( lock_hashref unlock_hashref lock_ref_keys );
 
-our $VERSION = '1.16';
+our $VERSION = '1.17';
 
 our @ISA    = qw( Exporter );
 our @EXPORT = qw(
@@ -326,8 +326,9 @@ sub str_unhex
 sub str_num_comma
 {
   my $data = shift;
+  my $pad  = shift || '`';
   $data = reverse $data;
-  $data =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1`/g;
+  $data =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1$pad/g;
   $data = reverse $data;
   return $data;
 }
@@ -801,7 +802,8 @@ INIT  { __url_escapes_init(); }
 
   # --------------------------------------------------------------------------
 
-  my $formatted_str = str_num_comma( 1234567.89 );  # returns "1'234'567.89"
+  my $formatted_str = str_num_comma( 1234567.89 );   # returns "1'234'567.89"
+  my $formatted_str = str_num_comma( 4325678, '_' ); # returns "4_325_678"
   my $padded_str    = str_pad( 'right', -12, '*' ); # returns "right*******"
   my $str_c         = str_countable( $dc, 'day', 'days' );
                       # returns 'days' for $dc == 0
@@ -869,6 +871,7 @@ check Data::Validate::Struct module by Thomas Linden, cheers :)
   <cade@biscom.net> <cade@datamax.bg> <cade@cpan.org>
 
   http://cade.datamax.bg
+
 
 =cut
 

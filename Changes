@@ -1,5 +1,9 @@
 Revision history for Perl extension Data::Tools
 
+1.17 2018-08-07
+
+    - str_num_comma() can accept second argument--padding symbol or string
+
 1.16 2018-07-19
 
     - added Data::Tools::Math functions

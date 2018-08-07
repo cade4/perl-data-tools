@@ -1,5 +1,3 @@
-
-
 # NAME
 
     Data::Tools provides set of basic functions for data manipulation.
@@ -15,6 +13,8 @@
     my $res     = file_save( $file_name, 'file content here' );
     my $content = file_load( $file_name );
 
+    my $content_arrayref = file_load_ar( $file_name );
+
     # --------------------------------------------------------------------------
 
     my $file_modification_time_in_seconds = file_mtime( $file_name );
@@ -24,18 +24,27 @@
 
     # --------------------------------------------------------------------------
     
-
     my $res  = dir_path_make( '/path/to/somewhere' ); # create full path with 0700
     my $res  = dir_path_make( '/new/path', MASK => 0755 ); # ...with mask 0755
     my $path = dir_path_ensure( '/path/s/t/h' ); # ensure path exists, check+make
 
     # --------------------------------------------------------------------------
-    
 
+    my $path_with_trailing_slash = file_path( $full_path_or_file_name );
+
+    # file_name() and file_name_ext() return full name with leadeing 
+    # dot for dot-files ( .filename )
+    my $file_name_including_ext  = file_name_ext( $full_path_or_file_name );
+    my $file_name_only_no_ext    = file_name( $full_path_or_file_name );
+
+    # file_ext() returns undef for dot-files ( .filename )
+    my $file_ext_only            = file_ext( $full_path_or_file_name );
+
+    # --------------------------------------------------------------------------
+    
     my $hash_str = hash2str( $hash_ref ); # convert hash to string "key=value\n"
     my $hash_ref = str2hash( $hash_str ); # convert str "key-value\n" to hash
     
-
     my $hash_ref = url2hash( 'key1=val1&key2=val2&testing=tralala);
     # $hash_ref will be { key1 => 'val1', key2 => 'val2', testing => 'tralala' }
 
@@ -45,14 +54,12 @@
     hash_uc_ipl( $hash_ref_to_be_converted_to_upper_case_keys );
     hash_lc_ipl( $hash_ref_to_be_converted_to_lower_case_keys );
     
-
     # save/load hash in str_url_escaped form to/from a file
     my $res      = hash_save( $file_name, $hash_ref );
     my $hash_ref = hash_load( $file_name );
 
     # validate (nested) hash by example
     
-
     # validation example nested hash
     my $validate_hr = {
                       A => 'INT',
@@ -78,26 +85,22 @@
                            },
                       }               
     
-
     my @invalid_keys = hash_validate( $data_hr, $validate_hr );
     print "YES!" if hash_validate( $data_hr, $validate_hr );
 
     # --------------------------------------------------------------------------
     
-
     my $escaped   = str_url_escape( $plain_str ); # URL-style %XX escaping
     my $plain_str = str_url_unescape( $escaped );
 
     my $escaped   = str_html_escape( $plain_str ); # HTML-style &name; escaping
     my $plain_str = str_html_unescape( $escaped );
     
-
     my $hex_str   = str_hex( $plain_str ); # HEX-style XX string escaping
     my $plain_str = str_unhex( $hex_str );
 
     # --------------------------------------------------------------------------
     
-
     # converts perl package names to file names, f.e: returns "Data/Tools.pm"
     my $perl_pkg_fn = perl_package_to_file( 'Data::Tools' );
 
@@ -110,7 +113,8 @@
 
     # --------------------------------------------------------------------------
 
-    my $formatted_str = str_num_comma( 1234567.89 );  # returns "1'234'567.89"
+    my $formatted_str = str_num_comma( 1234567.89 );   # returns "1'234'567.89"
+    my $formatted_str = str_num_comma( 4325678, '_' ); # returns "4_325_678"
     my $padded_str    = str_pad( 'right', -12, '*' ); # returns "right*******"
     my $str_c         = str_countable( $dc, 'day', 'days' );
                         # returns 'days' for $dc == 0
@@ -137,7 +141,6 @@ keys (possibly key paths like 'KEY1/KEY2/KEY3'):
     # array context
     my @invalid_keys = hash_validate( $data_hr, $validate_hr );
     
-
     # scalar context
     print "YES!" if hash_validate( $data_hr, $validate_hr );
 
@@ -170,7 +173,6 @@ check Data::Validate::Struct module by Thomas Linden, cheers :)
 
     git@github.com:cade-vs/perl-data-tools.git
     
-
     git clone git://github.com/cade-vs/perl-data-tools.git
     
 
@@ -181,17 +183,15 @@ check Data::Validate::Struct module by Thomas Linden, cheers :)
     <cade@biscom.net> <cade@datamax.bg> <cade@cpan.org>
 
     http://cade.datamax.bg
-
-
 # NAME
 
     Data::Tools::Socket provides set of socket I/O functions.
 
 # SYNOPSIS
 
-    use Data::Tools qw( :all );  # import all functions
-    use Data::Tools;             # the same as :all :) 
-    use Data::Tools qw( :none ); # do not import anything, use full package names
+    use Data::Tools::Socket qw( :all );  # import all functions
+    use Data::Tools::Socket;             # the same as :all :) 
+    use Data::Tools::Socket qw( :none ); # do not import anything, use full package names
 
     # --------------------------------------------------------------------------
 
@@ -265,7 +265,6 @@ Data::Tools::Socket uses:
 
     git@github.com:cade-vs/perl-data-tools.git
     
-
     git clone git://github.com/cade-vs/perl-data-tools.git
     
 
@@ -276,17 +275,15 @@ Data::Tools::Socket uses:
     <cade@biscom.net> <cade@datamax.bg> <cade@cpan.org>
 
     http://cade.datamax.bg
-
-
 # NAME
 
     Data::Tools::Time provides set of basic functions for time processing.
 
 # SYNOPSIS
 
-    use Data::Tools qw( :all );  # import all functions
-    use Data::Tools;             # the same as :all :) 
-    use Data::Tools qw( :none ); # do not import anything, use full package names
+    use Data::Tools::Time qw( :all );  # import all functions
+    use Data::Tools::Time;             # the same as :all :) 
+    use Data::Tools::Time qw( :none ); # do not import anything
 
     # --------------------------------------------------------------------------
 
@@ -295,7 +292,6 @@ Data::Tools::Socket uses:
 
     # --------------------------------------------------------------------------
       
-
     my $date_diff_str     = julian_date_diff_in_words( $date1 - $date2 );
     my $date_diff_str_rel = julian_date_diff_in_words_relative( $date1 - $date2 );
 
@@ -342,11 +338,9 @@ time/date difference wording functions does not have translation functions
 and return only english text. This is intentional since the goal is to keep
 the translation mess away but still allow simple (yet bit strange) 
 way to translate the result strings with regexp and language hash:
-  
 
     my $time_diff_str_rel = unix_time_diff_in_words_relative( $time1 - $time2 );
     
-
     my %TRANS = (
                 'now'       => 'sega',
                 'today'     => 'dnes',
@@ -368,7 +362,6 @@ way to translate the result strings with regexp and language hash:
                 'seconds'   => 'sekundi',
                 );
                 
-
     $time_diff_str_rel =~ s/([a-z]+)/$TRANS{ lc $1 } || $1/ge;
 
 I know this is no good for longer sentences but works fine in this case.
@@ -377,7 +370,55 @@ I know this is no good for longer sentences but works fine in this case.
 
     git@github.com:cade-vs/perl-data-tools.git
     
+    git clone git://github.com/cade-vs/perl-data-tools.git
+    
 
+# AUTHOR
+
+    Vladi Belperchinov-Shabanski "Cade"
+
+    <cade@bis.bg> <cade@biscom.net> <cade@datamax.bg> <cade@cpan.org>
+
+    http://cade.datamax.bg
+# NAME
+
+    Data::Tools::Math provides set of basic functions for mathematics.
+
+# SYNOPSIS
+
+    use Data::Tools::Math qw( :all );  # import all functions
+    use Data::Tools::Math;             # the same as :all :) 
+    use Data::Tools::Math qw( :none ); # do not import anything
+
+    # --------------------------------------------------------------------------
+
+
+    # --------------------------------------------------------------------------
+
+# FUNCTIONS
+
+## num\_round( $number, $precision )
+
+Rounds $number to $precisioun places after the decimal point.
+
+## num\_round\_trunc( $number, $precision )
+
+Same as num\_trunc() but just truncates after the $precision places.
+
+## num\_pow( $number, $exponent )
+
+Returns power of $number by $exponent ( $num \*\* $exp )
+
+# REQUIRED MODULES
+
+Data::Tools::Time uses:
+
+    * Math::BigFloat
+
+# GITHUB REPOSITORY
+
+    git@github.com:cade-vs/perl-data-tools.git
+    
     git clone git://github.com/cade-vs/perl-data-tools.git
     
 

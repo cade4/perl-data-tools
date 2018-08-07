@@ -13,7 +13,7 @@ use strict;
 use Exporter;
 use Time::HiRes qw( time );
 
-our $VERSION = '1.16';
+our $VERSION = '1.17';
 
 our @ISA    = qw( Exporter );
 our @EXPORT = qw(
@@ -270,6 +270,7 @@ Data::Tools::Socket uses:
   <cade@biscom.net> <cade@datamax.bg> <cade@cpan.org>
 
   http://cade.datamax.bg
+
 
 =cut
 

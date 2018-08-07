@@ -15,7 +15,7 @@ use Carp;
 use Data::Tools;
 use Math::BigFloat;
 
-our $VERSION = '1.16';
+our $VERSION = '1.17';
 
 our @ISA    = qw( Exporter );
 our @EXPORT = qw(
@@ -123,6 +123,7 @@ Data::Tools::Time uses:
   <cade@bis.bg> <cade@biscom.net> <cade@datamax.bg> <cade@cpan.org>
 
   http://cade.datamax.bg
+
 
 =cut
 

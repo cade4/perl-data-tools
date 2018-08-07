@@ -14,7 +14,7 @@ use Exporter;
 use Carp;
 use Data::Tools;
 
-our $VERSION = '1.16';
+our $VERSION = '1.17';
 
 our @ISA    = qw( Exporter );
 our @EXPORT = qw(
@@ -266,6 +266,7 @@ I know this is no good for longer sentences but works fine in this case.
   <cade@bis.bg> <cade@biscom.net> <cade@datamax.bg> <cade@cpan.org>
 
   http://cade.datamax.bg
+
 
 =cut
 
