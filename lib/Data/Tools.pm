@@ -3,7 +3,7 @@
 #  Data::Tools perl module
 #  2013-2018 (c) Vladi Belperchinov-Shabanski "Cade"
 #  http://cade.datamax.bg
-#  <cade@bis.bg> <cade@biscom.net> <cade@datamax.bg> <cade@cpan.org>
+#  <cade@bis.bg> <cade@cpan.org> <shabanski@gmail.com> 
 #
 #  GPL
 #
@@ -25,6 +25,8 @@ our @ISA    = qw( Exporter );
 our @EXPORT = qw(
 
               data_tools_set_file_io_encoding
+              data_tools_set_file_io_utf8
+              data_tools_set_file_io_bin
 
               file_save
               file_load
@@ -108,6 +110,18 @@ sub data_tools_set_file_io_encoding
 {
   $FILE_IO_ENCODING = shift;
   $FILE_IO_BINMODE  = uc $FILE_IO_ENCODING eq ':RAW' ? 1 : 0;
+}
+
+sub data_tools_set_file_io_utf8
+{
+  $FILE_IO_ENCODING = 'UTF-8';
+  $FILE_IO_BINMODE  = 0;
+}
+
+sub data_tools_set_file_io_bin
+{
+  $FILE_IO_ENCODING = ':RAW';
+  $FILE_IO_BINMODE  = 1;
 }
 
 ##############################################################################
