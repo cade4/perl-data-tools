@@ -10,10 +10,20 @@
 
     # --------------------------------------------------------------------------
 
-    my $res     = file_save( $file_name, 'file content here' );
-    my $content = file_load( $file_name );
+    data_tools_set_file_io_encoding( 'UTF-8' ); # all file IO will use UTF-8
+    data_tools_set_file_io_encoding( ':RAW' );  # all file IO will use binary data
 
-    my $content_arrayref = file_load_ar( $file_name );
+    my $res  = file_save( $file_name, 'file content here' );
+    my $data = file_load( $file_name );
+
+    my $data_arrayref = file_load_ar( $file_name );
+    
+    # for specific charset encoding and because of backward compatibility:
+
+    my $res  = file_save( { FILE_NAME => $file_name, ENCODING => 'UTF-8' }, 'data' );
+    my $data = file_load( { FILE_NAME => $file_name, ENCODING => 'UTF-8' } );
+
+    my $data_arrayref = file_load_ar( { FILE_NAME => $fname, ENCODING => 'UTF-8' } );
 
     # --------------------------------------------------------------------------
 
@@ -42,8 +52,17 @@
 
     # --------------------------------------------------------------------------
     
-    my $hash_str = hash2str( $hash_ref ); # convert hash to string "key=value\n"
+    # uses simple backslash escaping of \n, = and \ itself
+    my $data_str = hash2str( $hash_ref ); # convert hash to string "key=value\n"
     my $hash_ref = str2hash( $hash_str ); # convert str "key-value\n" to hash
+
+    # same as hash2str() but uses keys in certain order
+    my $data_str = hash2str_keys( \%hash, sort keys %hash );
+    my $data_str = hash2str_keys( \%hash, sort { $a <=> $b } keys %hash );
+
+    # same as hash2str() and str2hash() but uses URL-style escaping
+    my $data_str = hash2str_url( $hash_ref ); # convert hash to string "key=value\n"
+    my $hash_ref = str2hash_url( $hash_str ); # convert str "key-value\n" to hash
     
     my $hash_ref = url2hash( 'key1=val1&key2=val2&testing=tralala);
     # $hash_ref will be { key1 => 'val1', key2 => 'val2', testing => 'tralala' }
@@ -57,6 +76,13 @@
     # save/load hash in str_url_escaped form to/from a file
     my $res      = hash_save( $file_name, $hash_ref );
     my $hash_ref = hash_load( $file_name );
+
+    # save hash with certain keys order, uses hash2str_keys()
+    my $res      = hash_save( $file_name, \%hash, sort keys %hash );
+    
+    # same as hash_save() and hash_load() but uses hash2str_url() and str2hash_url()
+    my $res      = hash_save_url( $file_name, $hash_ref );
+    my $hash_ref = hash_load_url( $file_name );
 
     # validate (nested) hash by example
     
@@ -296,6 +322,34 @@ Data::Tools::Socket uses:
     my $date_diff_str_rel = julian_date_diff_in_words_relative( $date1 - $date2 );
 
     # --------------------------------------------------------------------------
+    
+    # gets current julian date, needs Time::JulianDay
+    my $jd = local_julian_day( time() );
+
+    # move current julian date to year ago, one month ahead and 2 days ahead
+    $jd = julian_date_add_ymd( $jd, -1, 1, 2 );
+
+    # get year, month and day from julian date
+    my ( $y, $m, $d ) = julian_date_to_ymd( $jd );
+
+    # get julian date from year, month and day
+    $jd = julian_date_from_ymd( $y, $m, $d );
+
+    # move julian date ($jd) to the first day of its current month
+    $jd = julian_date_goto_first_dom( $jd );
+
+    # move julian date ($jd) to the last day of its current month
+    $jd = julian_date_goto_last_dom( $jd );
+
+    # get day of week for given julian date ( 0 => Mon .. 6 => Sun )
+    my $dow = julian_date_get_dow( $jd );
+    print( ( qw( Mon Tue Wed Thu Fri Sat Sun ) )[ $dow ] . "\n" );
+
+    # get month days count for the given julian date's month
+    my $mdays = julian_date_month_days( $jd );
+
+    # get month days count for the given year and month
+    my $mdays = julian_date_month_days_ym( $y, $m );
 
 # FUNCTIONS
 
@@ -328,9 +382,11 @@ Same as julian\_date\_diff\_in\_words() but returns relative text
 
 # REQUIRED MODULES
 
-Data::Tools::Time uses only:
+Data::Tools::Time uses:
 
     * Data::Tools (from the same package)
+    * Date::Calc
+    * Time::JulianDay
 
 # TEXT TRANSLATION NOTES
 
