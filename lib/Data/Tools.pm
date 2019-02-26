@@ -19,7 +19,7 @@ use Digest::SHA1;
 use File::Glob;
 use Hash::Util qw( lock_hashref unlock_hashref lock_ref_keys );
 
-our $VERSION = '1.20';
+our $VERSION = '1.21';
 
 our @ISA    = qw( Exporter );
 our @EXPORT = qw(
@@ -69,6 +69,8 @@ our @EXPORT = qw(
               hash_lock_recursive
               hash_unlock_recursive
               hash_keys_lock_recursive
+              
+              list_uniq
 
               str_escape 
               str_unescape 
@@ -722,6 +724,14 @@ sub hash_keys_lock_recursive
     next unless ref( $vr ) eq 'HASH';
     hash_keys_lock_recursive( $vr );
     }
+}
+
+##############################################################################
+
+sub list_uniq 
+{
+  my %z;
+  return grep ! $z{ $_ }++, @_;
 }
 
 ##############################################################################
