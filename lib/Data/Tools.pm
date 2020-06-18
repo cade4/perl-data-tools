@@ -34,6 +34,13 @@ our @EXPORT = qw(
               file_load
               file_load_ar
 
+              file_bin_save
+              file_bin_load
+
+              file_text_save
+              file_text_load
+              file_text_load_ar
+
               file_mtime
               file_ctime
               file_atime
@@ -138,6 +145,7 @@ sub data_tools_set_file_io_bin
 }
 
 ##############################################################################
+# the old interface, still works but will be removed!
 
 sub file_load
 {
@@ -217,6 +225,41 @@ sub file_save
   close $o;
   return 1;
 }
+
+##############################################################################
+# binary files load/save
+
+sub file_bin_load
+{
+  my $fn  = shift; # file name
+
+  my $i;
+  open( $i, "<", $fn ) or return undef;
+  binmode( $i );
+  local $/ = undef;
+  my $s = <$i>;
+  close $i;
+  return $s;
+}
+
+sub file_bin_save
+{
+  my $fn = shift; # file name
+  
+  my $o;
+  open( $o, ">", $fn ) or return 0;
+  binmode( $o );
+  print $o @_;
+  close $o;
+  return 1;
+}
+
+##############################################################################
+# text files load/save
+
+*file_text_save    = *file_save;
+*file_text_load    = *file_load;
+*file_text_load_ar = *file_load_ar;
 
 ##############################################################################
 
