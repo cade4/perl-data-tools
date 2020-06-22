@@ -1,6 +1,10 @@
 Revision history for Perl extension Data::Tools
 
-1.24 2020-06-18
+1.24 2020-06-22
+
+    - reimplemented str_hex/unhex to use unpack/pack (of course!)
+         thanks to String::HexConvert for reminding me that pack 
+         is always here :)
 
     - added separate binary and text file load/save api. 
     

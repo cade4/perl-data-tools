@@ -373,13 +373,11 @@ sub str_unescape
 
 our $URL_ESCAPES_DONE;
 our %URL_ESCAPES;
-our %URL_ESCAPES_HEX;
 
 sub __url_escapes_init
 {
   return if $URL_ESCAPES_DONE;
   for ( 0 .. 255 ) { $URL_ESCAPES{ chr( $_ )     } = sprintf("%%%02X", $_); }
-  for ( 0 .. 255 ) { $URL_ESCAPES_HEX{ chr( $_ ) } = sprintf("%02X",   $_); }
   $URL_ESCAPES_DONE = 1;
 }
 
@@ -426,18 +424,12 @@ sub str_html_unescape
 
 sub str_hex
 {
-  my $text = shift;
-  
-  $text =~ s/(.)/$URL_ESCAPES_HEX{$1}/gs;
-  return $text;
+  return unpack( "H*",  shift() );
 }
 
 sub str_unhex
 {
-  my $text = shift;
-  
-  $text =~ s/([0-9A-F][0-9A-F])/chr(hex($1))/ge;
-  return $text;
+  return pack( "H*", shift() );
 }
 
 ##############################################################################
